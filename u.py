@@ -2,13 +2,19 @@ from tkinter import *
 import datetime
 import time
 
-
 def gettime():
     global timestr
     timestr = time.strftime('%Y%m%d.%H%M%S',time.localtime(time.time()))
     lb1 = Label(root, text='系统时间：'+ timestr)
     lb1.place(relx=0.05, rely=0, relwidth=0.3, relheight=0.08)
-
+def anys(str1):
+    j = 0
+    k = 0
+    for i in str1:
+        k = k + 1
+        if (i == '/'):
+            j = k
+    return str1[j:]
 
 def comit(timestr):
     filenum = CheckVar1.get() + CheckVar2.get() + CheckVar3.get() + CheckVar4.get() + CheckVar5.get()
@@ -18,29 +24,41 @@ def comit(timestr):
     f.write("SN=" + timestr+'\n')
     f.write("[DEVICE DESCRIPTION]\nESN=DEFAULT\nMAC=DEFAULT\n[UPGRADE INFO]\nDIRECTORY=/upgrade\n")
     f.write("FILENUM="+str(filenum)+'\n')
+
+    str1 = inp1.get()
+    str1 = anys(str1)
+    str2 = inp4.get()
+    str2 = anys(str2)
+    str3 = inp7.get()
+    str3 = anys(str3)
+    str4 = inp9.get()
+    str4 = anys(str4)
+    str5 = inp11.get()
+    str5 = anys(str5)
+
     if(CheckVar1.get() == 1):
         f.write("TPYE"+str(fnum)+'='+'SYSTEM-SOFTWARE\n')
-        f.write("FILENAME" +str(fnum) + '=' + inp1.get() + '\n')
+        f.write("FILENAME" +str(fnum) + '=' + str1 + '\n')
         f.write("FILE_MD5SUM" +str(fnum)+ '=' + inp2.get() + '\n')
         fnum = fnum + 1
     if (CheckVar2.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'SDK-SOFTWARE\n')
-        f.write("FILENAME" + str(fnum) + '=' + inp4.get() + '\n')
+        f.write("FILENAME" + str(fnum) + '=' + str2 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp5.get() + '\n')
         fnum = fnum + 1
     if (CheckVar3.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'SNMPD-CONFIG\n')
-        f.write("FILENAME" + str(fnum) + '=' + inp7.get() + '\n')
+        f.write("FILENAME" + str(fnum) + '=' + str3 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp8.get() + '\n')
         fnum = fnum + 1
     if (CheckVar4.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'SYSTEM-CONFIG\n')
-        f.write("FILENAME" + str(fnum) + '=' + inp9.get() + '\n')
+        f.write("FILENAME" + str(fnum) + '=' + str4 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp10.get() + '\n')
         fnum = fnum + 1
     if (CheckVar5.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'STARTUP-CONFIG\n')
-        f.write("FILENAME" + str(fnum) + '=' + inp11.get() + '\n')
+        f.write("FILENAME" + str(fnum) + '=' + str5 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp12.get() + '\n')
         fnum = fnum + 1
     if (CheckVar1.get() == 1):
@@ -61,7 +79,6 @@ def run():
         s5 = "STARTUP-CONFIG文件" if CheckVar5.get() == 1 else ""
         s = "您选择了%s %s %s %s %s" % (s1, s2, s3, s4, s5)
     lb2.config(text=s)
-
 
 
 root=Tk()
@@ -93,7 +110,6 @@ btn.pack()
 
 lb2 = Label(root,text='')
 lb2.pack()
-
 
 timestr=' '
 gettime()
@@ -153,5 +169,6 @@ lb13=Label(root,text='STARTUP-CONFIG文件')
 lb13.place(relx=0.5, rely=0.65, relwidth=0.23, relheight=0.05)
 lb14=Label(root,text='STARTUP-CONFIG MD5')
 lb14.place(relx=0.5, rely=0.73, relwidth=0.23, relheight=0.05)
+
 
 root.mainloop()
