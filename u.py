@@ -3,6 +3,8 @@ import datetime
 import time
 from tkinter import filedialog
 
+import os
+
 def gettime():
     global timestr
     timestr = time.strftime('%Y%m%d.%H%M%S',time.localtime(time.time()))
@@ -83,15 +85,16 @@ def run():
     lb2.config(text=s)
 
 def get_path(entry_text):
-    path = filedialog.askopenfilename(title='请选择文件')
+    path = filedialog.askopenfilename(title='请选择文件', initialdir=(os.path.expanduser('H:/')))
     entry_text.set(path)
 
 def get_md5(entry_text):
-    path = filedialog.askopenfilename(title='请选择文件')
-    file_text = '111'
-    if path is not None:
-        with open(file=path, mode='r+', encoding='utf-8') as file:
-            file_text = file.read()
+    path = filedialog.askopenfilename(title='请选择文件', initialdir=(os.path.expanduser('H:/')))
+    file_text = ''
+    if len(path) != 0:
+        if path is not None:
+             with open(file=path, mode='r+', encoding='utf-8') as file:
+                file_text = file.read()
     entry_text.set(file_text)
 
 root=Tk()
