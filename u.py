@@ -1,9 +1,7 @@
 from tkinter import *
-import datetime
 import time
 from tkinter import filedialog
-
-import os
+import os,shutil
 
 def gettime():
     global timestr
@@ -21,8 +19,10 @@ def anys(str1):
     return str1[j:]
 
 def comit(timestr):
+    global pth
+    global pth2
     filenum = CheckVar1.get() + CheckVar2.get() + CheckVar3.get() + CheckVar4.get() + CheckVar5.get()
-    f = open('test.ini', 'w')
+    f = open(pth+'/test.ini', 'w')
     fnum = 1
     f.write("BEGIN SNOLT\n[USB CONFIG]\n")
     f.write("SN=" + timestr+'\n')
@@ -30,40 +30,50 @@ def comit(timestr):
     f.write("FILENUM="+str(filenum)+'\n')
 
     str1 = inp1.get()
+    s1 = str1
     str1 = anys(str1)
     str2 = inp4.get()
+    s2 = str2
     str2 = anys(str2)
     str3 = inp7.get()
+    s3 = str3
     str3 = anys(str3)
     str4 = inp9.get()
+    s4 = str4
     str4 = anys(str4)
     str5 = inp11.get()
+    s5 = str5
     str5 = anys(str5)
 
     if(CheckVar1.get() == 1):
         f.write("TPYE"+str(fnum)+'='+'SYSTEM-SOFTWARE\n')
         f.write("FILENAME" +str(fnum) + '=' + str1 + '\n')
         f.write("FILE_MD5SUM" +str(fnum)+ '=' + inp2.get() + '\n')
+        shutil.copyfile(s1, pth2 + '/' + str1)
         fnum = fnum + 1
     if (CheckVar2.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'SDK-SOFTWARE\n')
         f.write("FILENAME" + str(fnum) + '=' + str2 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp5.get() + '\n')
+        shutil.copyfile(s2, pth2 + '/' + str2)
         fnum = fnum + 1
     if (CheckVar3.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'SNMPD-CONFIG\n')
         f.write("FILENAME" + str(fnum) + '=' + str3 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp8.get() + '\n')
+        shutil.copyfile(s3, pth2 + '/' + str3)
         fnum = fnum + 1
     if (CheckVar4.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'SYSTEM-CONFIG\n')
         f.write("FILENAME" + str(fnum) + '=' + str4 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp10.get() + '\n')
+        shutil.copyfile(s4, pth2 + '/' + str4)
         fnum = fnum + 1
     if (CheckVar5.get() == 1):
         f.write("TPYE" + str(fnum) + '=' + 'STARTUP-CONFIG\n')
         f.write("FILENAME" + str(fnum) + '=' + str5 + '\n')
         f.write("FILE_MD5SUM" + str(fnum) + '=' + inp12.get() + '\n')
+        shutil.copyfile(s5, pth2 + '/' + str5)
         fnum = fnum + 1
     if (CheckVar1.get() == 1):
         f.write("SYSTEM_VERSION" + '=' + inp3.get() + '\n')
@@ -97,6 +107,15 @@ def get_md5(entry_text):
                 file_text = file.read()
     entry_text.set(file_text)
 
+def get_path2():
+    global pth
+    global pth2
+    pth = filedialog.askdirectory(title='请选择u盘文件夹', initialdir=(os.path.expanduser('H:/')))
+    if len(pth) == 0:
+        pth = '.'
+    os.mkdir(pth+'/upgrade')
+    pth2 = pth+'/upgrade'
+
 root=Tk()
 root.title('U盘开局索引文件制作工具')
 root.geometry('800x800')
@@ -128,6 +147,8 @@ lb2 = Label(root,text='')
 lb2.pack()
 
 timestr=' '
+pth=' '
+pth2='.'
 gettime()
 
 btn1 = Button(root, text='刷新', command=gettime)
@@ -197,6 +218,9 @@ btn14 = Button(root,text='STARTUP-CONFIG文件', command=lambda:get_path(entry_t
 btn14.place(relx=0.5, rely=0.65, relwidth=0.23, relheight=0.05)
 btn15 = Button(root,text='STARTUP-CONFIG MD5', command=lambda:get_md5(entry_text12))
 btn15.place(relx=0.5, rely=0.73, relwidth=0.23, relheight=0.05)
+
+btn16 = Button(root,text='选择u盘文件夹', command=get_path2)
+btn16.place(relx=0.65, rely=0.85, relwidth=0.17, relheight=0.08)
 
 
 root.mainloop()
