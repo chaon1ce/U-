@@ -22,7 +22,7 @@ def comit(timestr):
     global pth
     global pth2
     filenum = CheckVar1.get() + CheckVar2.get() + CheckVar3.get() + CheckVar4.get() + CheckVar5.get()
-    f = open(pth+'/test.ini', 'w')
+    f = open(pth+'/snolt_usb.ini', 'w')
     fnum = 1
     f.write("BEGIN SNOLT\n[USB CONFIG]\n")
     f.write("SN=" + timestr+'\n')
@@ -99,12 +99,13 @@ def get_path(entry_text):
     entry_text.set(path)
 
 def get_md5(entry_text):
-    path = filedialog.askopenfilename(title='请选择文件', initialdir=(os.path.expanduser('H:/')))
+    path = filedialog.askopenfilename(title='请选择文件')
     file_text = ''
     if len(path) != 0:
         if path is not None:
              with open(file=path, mode='r+', encoding='utf-8') as file:
                 file_text = file.read()
+    file_text = file_text.replace('\n', '')
     entry_text.set(file_text)
 
 def get_path2():
